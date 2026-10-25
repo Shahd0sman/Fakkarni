@@ -9,6 +9,7 @@ import {
   UserRound,
   BellRing,
 } from "lucide-react";
+import { useAuth } from "../../hooks/useAuth.js";
 
 const navigation = [
   { to: "/dashboard", label: "الداشبورد", icon: LayoutDashboard },
@@ -21,8 +22,10 @@ const navigation = [
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   function handleLogout() {
+    logout();
     navigate("/login");
   }
 
@@ -47,10 +50,16 @@ export default function Sidebar() {
           <UserRound size={21} strokeWidth={1.8} />
         </div>
         <div className="account-details">
-          <strong>حسابي</strong>
-          <span>أهلًا بيك</span>
+          <strong>{user?.name || "حسابي"}</strong>
+          <span>{user?.email || "أهلًا بيك"}</span>
         </div>
-        <button className="account-logout" type="button" onClick={handleLogout} aria-label="تسجيل الخروج" title="تسجيل الخروج">
+        <button
+          className="account-logout"
+          type="button"
+          onClick={handleLogout}
+          aria-label="تسجيل الخروج"
+          title="تسجيل الخروج"
+        >
           <LogOut size={18} aria-hidden="true" />
           <span>خروج</span>
         </button>

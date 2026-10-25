@@ -34,14 +34,15 @@
 }
 
 .app-brand__logo {
-  width: 39px;
-  height: 39px;
+  width: 45px;
+  height: 45px;
   object-fit: contain;
 }
 
 .app-brand__name {
   display: grid;
   line-height: 1.2;
+  gap:4px;
 }
 
 .app-brand__name strong {

@@ -2,15 +2,38 @@ import { useEffect, useState } from "react";
 import { Bell, Moon, Search, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
+import notificationService from "../../services/notificationservice";
 
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(
     () => window.localStorage.getItem("fakkarny-theme") === "dark",
   );
+  const [hasUnread, setHasUnread] = useState(false);
 
   useEffect(() => {
     document.documentElement.dataset.theme = darkMode ? "dark" : "light";
   }, [darkMode]);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function checkNotifications() {
+      try {
+        const res = await notificationService.getNotifications();
+        if (isMounted && res?.data) {
+          const unread = res.data.some((n) => !n.isRead);
+          setHasUnread(unread);
+        }
+      } catch {
+        // Ignore if error
+      }
+    }
+    checkNotifications();
+    const interval = setInterval(checkNotifications, 30000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   function toggleTheme() {
     const nextTheme = darkMode ? "light" : "dark";
@@ -21,7 +44,7 @@ export default function Navbar() {
   return (
     <header className="app-header">
       <Link className="app-brand" to="/dashboard" aria-label="فكّرني - الرئيسية">
-        <img className="app-brand__logo" src={logo} alt="" />
+        <img className="app-brand__logo" src={logo} alt="logo" />
         <span className="app-brand__name">
           <strong lang="ar">فكّرني</strong>
           <span lang="en" dir="ltr">fakkarny</span>
@@ -31,15 +54,20 @@ export default function Navbar() {
       <form className="app-search" role="search" onSubmit={(event) => event.preventDefault()}>
         <Search aria-hidden="true" size={19} />
         <input type="search" placeholder="ابحث عن مستند، فاتورة أو تذكير..." aria-label="بحث" />
-        <kbd>⌘ K</kbd>
       </form>
 
       <div className="app-header__actions">
         <Link className="icon-button notification-button" to="/notifications" aria-label="الإشعارات">
           <Bell size={20} aria-hidden="true" />
-          <span className="notification-button__dot" aria-hidden="true" />
+          {hasUnread && <span className="notification-button__dot" aria-hidden="true" />}
         </Link>
-        <button className="icon-button" type="button" onClick={toggleTheme} aria-label={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"} title={darkMode ? "الوضع الفاتح" : "الوضع الداكن"}>
+        <button
+          className="icon-button"
+          type="button"
+          onClick={toggleTheme}
+          aria-label={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
+          title={darkMode ? "الوضع الفاتح" : "الوضع الداكن"}
+        >
           {darkMode ? <Sun size={20} aria-hidden="true" /> : <Moon size={20} aria-hidden="true" />}
         </button>
       </div>
