@@ -173,9 +173,11 @@ export default function BillsPage() {
         title="الفواتير"
         description="تابع فواتيرك ومواعيد استحقاقها وحالتها المالية."
       >
-        <Button variant="primary" icon={Plus} onClick={openCreateModal}>
-          إضافة فاتورة
-        </Button>
+        {bills.length > 0 && (
+          <Button variant="primary" icon={Plus} onClick={openCreateModal}>
+            إضافة فاتورة
+          </Button>
+        )}
       </PageHeader>
 
       <ErrorMessage message={error} onRetry={fetchBills} />

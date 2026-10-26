@@ -51,7 +51,6 @@ export default function Sidebar() {
         </div>
         <div className="account-details">
           <strong>{user?.name || "حسابي"}</strong>
-          <span>{user?.email || "أهلًا بيك"}</span>
         </div>
         <button
           className="account-logout"

@@ -187,9 +187,11 @@ export default function DocumentsPage() {
         title="المستندات والوثائق"
         description="احتفظ بنسخ من أوراقك الثبوتية وتواريخ صلاحيتها ومرفقاتها."
       >
-        <Button variant="primary" icon={Plus} onClick={openCreateModal}>
-          إضافة مستند
-        </Button>
+        {documents.length > 0 && (
+          <Button variant="primary" icon={Plus} onClick={openCreateModal}>
+            إضافة مستند
+          </Button>
+        )}
       </PageHeader>
 
       <ErrorMessage message={error} onRetry={fetchDocuments} />

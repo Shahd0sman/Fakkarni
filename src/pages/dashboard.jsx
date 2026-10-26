@@ -104,7 +104,7 @@ export default function DashboardPage() {
   return (
     <div>
       <PageHeader
-        title={`مرحبًا، ${user?.name || "بك"} 👋`}
+        title={`مرحبًا، ${user?.name || "بك"}`}
         description="نظرة عامة على مستنداتك وفواتيرك ومواعيدك القادمة."
       />
 
@@ -252,7 +252,7 @@ export default function DashboardPage() {
 
               {expiringSoonDocs.length === 0 ? (
                 <p style={{ margin: 0, color: "var(--color-text-secondary)", fontSize: "14px" }}>
-                  لا توجد مستندات تقترب من تاريخ انتهائها حالياً 👍
+                  لا توجد مستندات تقترب من تاريخ انتهائها حالياً
                 </p>
               ) : (
                 <div style={{ display: "grid", gap: "10px" }}>

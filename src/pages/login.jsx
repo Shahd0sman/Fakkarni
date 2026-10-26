@@ -5,7 +5,7 @@ import { useAuth } from "../hooks/useAuth.js";
 import Input from "../components/common/input.jsx";
 import Button from "../components/common/button.jsx";
 import ErrorMessage from "../components/common/error.jsx";
-import logo from "../assets/logo.svg";
+import logo from "../assets/logo.png";
 
 export default function LoginPage() {
   const navigate = useNavigate();

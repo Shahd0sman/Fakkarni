@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, KeyRound, AlertTriangle, CheckCircle } from "lucide-react";
+import { User, AlertTriangle, CheckCircle } from "lucide-react";
 import PageHeader from "../components/layout/pageHeader.jsx";
 import Button from "../components/common/button.jsx";
 import Input from "../components/common/input.jsx";
@@ -14,21 +14,10 @@ export default function SettingsPage() {
   // Profile Form
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
-    email: user?.email || "",
   });
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileSuccess, setProfileSuccess] = useState("");
   const [profileError, setProfileError] = useState("");
-
-  // Password Form
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
-  });
-  const [passwordLoading, setPasswordLoading] = useState(false);
-  const [passwordSuccess, setPasswordSuccess] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
   // Delete Account
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -45,7 +34,6 @@ export default function SettingsPage() {
     try {
       const res = await authService.updateProfile({
         name: profileData.name.trim(),
-        email: profileData.email.trim(),
       });
       if (res && res.data) {
         updateUserState(res.data);
@@ -55,35 +43,6 @@ export default function SettingsPage() {
       setProfileError(err.response?.data?.message || "تعذر تحديث البيانات");
     } finally {
       setProfileLoading(false);
-    }
-  };
-
-  const handlePasswordSubmit = async (e) => {
-    e.preventDefault();
-    setPasswordError("");
-    setPasswordSuccess("");
-
-    if (passwordData.newPassword.length < 6) {
-      setPasswordError("كلمة المرور الجديدة يجب ألا تقل عن 6 أحرف");
-      return;
-    }
-    if (passwordData.newPassword !== passwordData.confirmNewPassword) {
-      setPasswordError("كلمات المرور الجديدة غير متطابقة");
-      return;
-    }
-
-    setPasswordLoading(true);
-    try {
-      await authService.changePassword({
-        currentPassword: passwordData.currentPassword,
-        newPassword: passwordData.newPassword,
-      });
-      setPasswordSuccess("تم تغيير كلمة المرور بنجاح");
-      setPasswordData({ currentPassword: "", newPassword: "", confirmNewPassword: "" });
-    } catch (err) {
-      setPasswordError(err.response?.data?.message || "تعذر تغيير كلمة المرور");
-    } finally {
-      setPasswordLoading(false);
     }
   };
 
@@ -107,7 +66,7 @@ export default function SettingsPage() {
     <div>
       <PageHeader
         title="الإعدادات"
-        description="إدارة بيانات حسابك وتفضيلات الأمان."
+        description="إدارة بيانات حسابك."
       />
 
       <div style={{ display: "grid", gap: "24px", maxWidth: "680px" }}>
@@ -145,79 +104,8 @@ export default function SettingsPage() {
               required
             />
 
-            <Input
-              label="البريد الإلكتروني"
-              name="email"
-              type="email"
-              value={profileData.email}
-              onChange={(e) => setProfileData((prev) => ({ ...prev, email: e.target.value }))}
-              required
-            />
-
             <Button type="submit" variant="primary" loading={profileLoading}>
               حفظ التعديلات
-            </Button>
-          </form>
-        </div>
-
-        {/* Change Password */}
-        <div className="card">
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
-            <KeyRound size={20} style={{ color: "var(--color-primary)" }} />
-            <h3 style={{ margin: 0, fontSize: "17px" }}>تغيير كلمة المرور</h3>
-          </div>
-
-          <ErrorMessage message={passwordError} />
-          {passwordSuccess && (
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "10px 14px",
-              backgroundColor: "color-mix(in srgb, var(--color-success) 12%, transparent)",
-              color: "var(--color-success)",
-              borderRadius: "var(--radius-sm)",
-              marginBottom: "16px",
-              fontSize: "14px"
-            }}>
-              <CheckCircle size={16} />
-              {passwordSuccess}
-            </div>
-          )}
-
-          <form onSubmit={handlePasswordSubmit}>
-            <Input
-              label="كلمة المرور الحالية"
-              name="currentPassword"
-              type="password"
-              value={passwordData.currentPassword}
-              onChange={(e) => setPasswordData((prev) => ({ ...prev, currentPassword: e.target.value }))}
-              placeholder="••••••••"
-              required
-            />
-
-            <Input
-              label="كلمة المرور الجديدة"
-              name="newPassword"
-              type="password"
-              value={passwordData.newPassword}
-              onChange={(e) => setPasswordData((prev) => ({ ...prev, newPassword: e.target.value }))}
-              placeholder="6 أحرف على الأقل"
-              required
-            />
-
-            <Input
-              label="تأكيد كلمة المرور الجديدة"
-              name="confirmNewPassword"
-              type="password"
-              value={passwordData.confirmNewPassword}
-              onChange={(e) => setPasswordData((prev) => ({ ...prev, confirmNewPassword: e.target.value }))}
-              placeholder="••••••••"
-              required
-            />
-
-            <Button type="submit" variant="primary" loading={passwordLoading}>
-              تحديث كلمة المرور
             </Button>
           </form>
         </div>

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, FileText, Receipt, Bell } from "lucide-react";
 import { useAuth } from "../hooks/useAuth.js";
 import Button from "../components/common/button.jsx";
-import logo from "../assets/logo.svg";
+import logo from "../assets/logo.png";
 
 export default function LandingPage() {
   const { isAuthenticated } = useAuth();

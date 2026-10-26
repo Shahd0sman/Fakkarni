@@ -149,9 +149,11 @@ export default function RemindersPage() {
         title="التذكيرات الذكية"
         description="تنبيهات تلقائية مجدولة قبل انتهاء صلاحية مستنداتك ووثائقك."
       >
-        <Button variant="primary" icon={Plus} onClick={openCreateModal}>
-          إضافة تذكير
-        </Button>
+        {reminders.length > 0 && (
+          <Button variant="primary" icon={Plus} onClick={openCreateModal}>
+            إضافة تذكير
+          </Button>
+        )}
       </PageHeader>
 
       <ErrorMessage message={error} onRetry={fetchData} />
